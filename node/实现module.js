@@ -1,14 +1,21 @@
 let path = require('path');
 let fs = require('fs');
+let vm = require('vm');
 
 function Module(id) {
     this.id = id;
     this.exports = {};
 }
+Module.wrapper = ['(function(module, exports, id){', '\n})'];
+Module.wrap = function(script) {
+    return Module.wrapper[0] + script + Module.wrapper[1];
+}
 // 扩展名
 Module._extensions = {
-    '.js'() {
-
+    '.js'(module) {
+       let fn  =  fs.readFileSync(module.id, 'utf8');
+       let m = vm.runInThisContext(Module.wrap(fn))
+       m(module, module.exports, module.id);
     },
     '.json'(module) {
         module.exports =  fs.readFileSync(module.id, 'utf8');
@@ -53,6 +60,4 @@ function req(id) {
 
 let sj = req('./user');  // 会先找js, 再找json
 
-console.log(sj)
-
-
+sj()

@@ -17,7 +17,7 @@ try {
 /* path模块 */
 let path = require('path');
 
-console.log(path.resolve('a'))  // 将a转化成绝对路径
+console.log(path.resolve('a'))  // 将a转化成绝对路径   (默认从根目录开始)
 console.log(__dirname);  // 当前文件夹所在的绝对路径
 console.log(path.resolve(__dirname,'a'))  // 依次将参数转化为绝对路径 延用上次的路径拼接
 console.log(path.resolve('/','a'))   // 特例  遇到 / 就会变回根目录
